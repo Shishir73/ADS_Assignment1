@@ -1,4 +1,5 @@
 package adsassignment.set;
+@SuppressWarnings("unchecked")
 public interface ISet<T extends Comparable<T>> {
 
     /**
