@@ -10,7 +10,7 @@ public interface IPriorityQueue<T> {
      */
 
     /**
-     * addes the element 'element' to the priority queue, with a priority of 'priority'
+     * adds the element 'element' to the priority queue, with a priority of 'priority'
      * @param element the element to add. Cannot be null, in this case the method does nothing.
      * @param priority the priority of the above element
      */

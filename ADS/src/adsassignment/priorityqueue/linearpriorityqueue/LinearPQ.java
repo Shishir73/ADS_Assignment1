@@ -10,44 +10,35 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 
 	public LinearPQ() {
 		size = 0;
+		front = null;
 	}
 
 	@Override
 	public void add(T element, double priority) {
 		if (element == null) {
-			throw new IllegalArgumentException();
-		}
-		else
-		{
+			//throw new IllegalArgumentException();
+		} else {
 			PQNode<T> temp = new PQNode<T>(element, priority);
-			if(front == null){
+			if (front == null) {
 				front = temp;
 				front.setNext(front);
-			}
-			else
-			{
-				if(front.getNext() == front)
-				{
-					if(front.getPriority() > priority)
-					{
+			} else {
+				if (front.getNext() == front) {
+					if (front.getPriority() > priority) {
 						temp.setNext(front);
 						front = temp;
-					}else{
+					} else {
 						front.setNext(temp);
 						temp.setNext(front);
 					}
-				}
-				else
-				{
+				} else {
 					PQNode<T> current = front;
-					while(current.hasNext() && !current.getNext().equals(front))
-					{
-						if(current.getNext().getPriority() > priority)
-						{
+					while (current.hasNext()
+							&& !current.getNext().equals(front)) {
+						if (current.getNext().getPriority() > priority) {
 							temp.setNext(current.getNext());
 							current.setNext(temp);
-						}
-						else if(current.getNext().getNext() == front){
+						} else if (current.getNext().getNext().equals(front)) { //if the priority is the lowest then put it at the end of the queue.
 							temp.setNext(front);
 							current.getNext().setNext(temp);
 						}
@@ -62,18 +53,15 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 	@Override
 	public T getNext() {
 		// TODO Auto-generated method stub
+		if (size == 0) {
+			return null;
+		}else{
 		PQNode<T> temp = front;
-		size--;
-		if(size == 0)
-		{
-			front = null;
-		}
-		else
-		{
-			front = front.getNext();			
-		}
-		
-		return temp.getElement();
+			size--;
+			front = front.getNext();
+			return temp.getElement();
+			}
+
 	}
 
 	@Override
@@ -85,18 +73,38 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 	@Override
 	public boolean isEmpty() {
 		// TODO Auto-generated method stub
-		return size==0;
+		return size == 0;
 	}
 
 	@Override
 	public void printPQ() {
-		// TODO Auto-generated method stub
-		
+		String str = "";
+		PQNode<T> current = front;
+		for (int i = 0; i < size; i++) {
+			str += " (" + current.getElement() + ", " + current.getPriority()
+					+ ")";
+			current = current.getNext();
+		}
+		System.out.println(str);
+
 	}
 
 	@Override
 	public boolean contains(T element) {
-		// TODO Auto-generated method stub
+		if(element.equals(null)){
+			return false;
+		}
+		else if (front.getElement().equals(element)) {
+			return true;
+		} else {
+			PQNode<T> current = front;
+			while (current.hasNext() && !current.getNext().equals(front)) {
+				if (current.getNext().getElement().equals(element)) {
+					return true;
+				}
+				current = current.getNext();
+			}
+		}
 		return false;
 	}
 
@@ -105,5 +113,4 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 		// TODO Auto-generated method stub
 		front = null;
 	}
-
 }
