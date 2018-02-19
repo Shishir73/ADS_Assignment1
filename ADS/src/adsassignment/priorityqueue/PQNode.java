@@ -2,53 +2,47 @@ package adsassignment.priorityqueue;
 
 public class PQNode<T> implements Comparable<PQNode<T>> {
 
-    public T element;
-    public double priority;
-    public int secPriority;
-    private PQNode<T> front;
-
-    public PQNode(T element, double priority, int secPriority) {
-        this.element = element;
-        this.priority = priority;
-        this.secPriority = secPriority;
-        front = null;
-    }
+    private T element;
+    private double priority;
+    private PQNode<T> next,last;
     
     public PQNode(T element, double priority) {
         this.element = element;
         this.priority = priority;
-        front = null;
+        next = last = null;
     }
     
 
     /**
-     * Returns less than zero, if this PQNode's priority is less than the parameter PQNode. Zero if they are the same.
-     * Larger than zero if the parameter PQNode is less than this PQNode.
+     * Returns less than zero, if this PQNode's priority is less than the parameter PQNode.
      * @param tpqNode node to compare against
      * @return integer based on the comparison
      */
     @Override
     public int compareTo(PQNode<T> tpqNode) {
-        if(priority == tpqNode.priority) {
-            return secPriority - tpqNode.secPriority;
-        }
         return priority < tpqNode.priority ? -1 : 1;
     }
     
     public PQNode<T> getNext(){
-    	return front;
-    }
-    public T getElement(){
-    	return element;
-    }
-    public void setNext(PQNode<T> current)
-    {
-    	this.front = current;
+    	return next;
     }
     
-    public boolean hasNext()
+    public PQNode<T> getLast(){
+    	return last;
+    }
+    
+    public void setNext(PQNode<T> next)
     {
-    	return front != null;
+    	this.next = next;
+    }
+    
+    public void setLast(PQNode<T> last)
+    {
+    	this.last = last;
+    }
+    
+    public T getElement(){
+    	return element;
     }
     
     public double getPriority()

@@ -5,46 +5,49 @@ import adsassignment.priorityqueue.PQNode;
 
 public class LinearPQ<T> implements IPriorityQueue<T> {
 
-	private PQNode<T> front;
+	private PQNode<T> front, rear;
 	private int size;
 
 	public LinearPQ() {
 		size = 0;
-		front = null;
+		front = rear = null;
 	}
 
 	@Override
 	public void add(T element, double priority) {
-		if (element == null) {
-			//throw new IllegalArgumentException();
-		} else {
-			PQNode<T> temp = new PQNode<T>(element, priority);
-			if (front == null) {
-				front = temp;
-				front.setNext(front);
-			} else {
-				if (front.getNext() == front) {
-					if (front.getPriority() > priority) {
-						temp.setNext(front);
-						front = temp;
-					} else {
-						front.setNext(temp);
-						temp.setNext(front);
-					}
-				} else {
-					PQNode<T> current = front;
-					while (current.hasNext()
-							&& !current.getNext().equals(front)) {
-						if (current.getNext().getPriority() > priority) {
-							temp.setNext(current.getNext());
-							current.setNext(temp);
-						} else if (current.getNext().getNext().equals(front)) { //if the priority is the lowest then put it at the end of the queue.
-							temp.setNext(front);
-							current.getNext().setNext(temp);
-						}
-						current = current.getNext();
-					}
+		if (element == null) { //throw new IllegalArgumentException();
+			} 
+		else 
+		{
+			PQNode<T> node = new PQNode<T>(element, priority);
+			
+			if(isEmpty())
+			{
+				front = rear = node;
+			}
+			else if(node.getPriority() < front.getPriority())
+			{
+				node.setNext(front);
+				front.setLast(node);
+				front = node;
+			}
+			else if(rear.getPriority() <= node.getPriority())
+			{
+				rear.setNext(node);
+				node.setLast(rear);
+				rear = node;
+			}
+			else
+			{
+				PQNode<T> current = front;
+				while(!(node.getPriority() < current.getPriority()))
+				{
+					current = current.getNext();
 				}
+				node.setNext(current);
+				node.setLast(current.getLast());
+				current.getLast().setNext(node);
+				current.setLast(node);
 			}
 			size++;
 		}
@@ -53,14 +56,23 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 	@Override
 	public T getNext() {
 		// TODO Auto-generated method stub
-		if (size == 0) {
+		if (isEmpty()) 
+		{
 			return null;
-		}else{
-		PQNode<T> temp = front;
-			size--;
+		}
+		else
+		{
+			T element = front.getElement();
 			front = front.getNext();
-			return temp.getElement();
+			size--;
+			
+			if(isEmpty())
+			{
+				rear = null;
 			}
+			
+			return element;
+		}
 
 	}
 
@@ -91,15 +103,15 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 
 	@Override
 	public boolean contains(T element) {
-		if(element.equals(null)){
+		if(element == null){
 			return false;
 		}
-		else if (front.getElement().equals(element)) {
-			return true;
-		} else {
+		else 
+		{
 			PQNode<T> current = front;
-			while (current.hasNext() && !current.getNext().equals(front)) {
-				if (current.getNext().getElement().equals(element)) {
+			for (int i = 0; i < size; i++) {
+				if(current.getElement().equals(element))
+				{
 					return true;
 				}
 				current = current.getNext();
@@ -111,6 +123,7 @@ public class LinearPQ<T> implements IPriorityQueue<T> {
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		front = null;
+		front = rear = null;
+		size = 0;
 	}
 }
